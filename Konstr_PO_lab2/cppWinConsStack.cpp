@@ -3,115 +3,77 @@
 #include "stdafx.h"
 using namespace System;
 
-// 1.1 стек строк (не класс)
-static int MaxSize = 100;
-static int top = 0;
-static void push(String^ c, array<String^>^ st)
-{
-	// если максимальный размер стека не превышен
-	// то можем добавить элемент
-	if (top < MaxSize)
-		st[top++] = c;
+// 1.2  класс-стек строк
+#include "stdafx.h"
+using namespace System;
 
-	// иначе не добавляем
-	else Console::WriteLine("Стек переполнен!");
-}
-static String^ pop(array<String^>^ st)
+ref class Stack
 {
-	// если стек не пуст
-	if (top > 0)
-		return st[--top];
+	int MaxId;
+	String^ StackId;
+	int MaxSize;
+	int top;
+	array<String^>^ ST;
 
-	// если же стек пуст
-	Console::WriteLine("Стек пуст!");
-	return "";
-}
+public:
+	Stack(String^ mSize):
+		top(0)
+	{
+		MaxSize = Convert::ToInt32(mSize);
+		ST = gcnew array<String^>(MaxSize);
+		MaxId++;
+		StackId = Convert::ToString(MaxId);
+		Console::WriteLine("Создан стек {0}!", StackId );
+	};
+
+	void push(String^ c)
+	{
+		if (top < MaxSize)
+			ST[top++] = c;
+		else Console::WriteLine("Стек переполнен!");
+	}
+
+	String^ pop()
+	{
+		if (top > 0)
+			return ST[--top];
+		else
+		{
+			Console::WriteLine("Стек пуст!");
+			return "";
+		}
+	}
+};
 int main(array<String^>^ args)
 {
-	// создаем стек
-	array<String^>^ ST = gcnew array<String^>(MaxSize);
+	Stack^ vs;
+	Console::WriteLine("Создать стек?");
+	if (Console::ReadLine() == "да")
+	{
+		Console::WriteLine("какой глубины?");
+		vs = gcnew Stack(Console::ReadLine()); 
+	}
+	// если стек создавать не нужно
+	// выходим из программы
+	else return 0;
 
-	// строка для работы с консолью
 	String^ s;
-
-	// главный цикл
+	// главный цикл программы
 	do
 	{
 		Console::WriteLine("Что сделать?");
 		s = Console::ReadLine();
-		
+
 		if (s == "заложить")
 		{
 			Console::WriteLine("Что?");
-			push(Console::ReadLine(), ST);
+			vs->push(Console::ReadLine());
 		}
 
 		if (s == "достать")
-			Console::WriteLine(pop(ST));
+			Console::WriteLine(vs->pop());
 
 	} while (s != "");
+
+	return 0;
 }
-
-
-//ref class Stack {
-//private:
-//    cli::array<String^>^ st;
-//    int top;
-//
-//public:
-//    Stack()
-//	{
-//        st = gcnew cli::array<String^>(100);
-//        top = 0;
-//    }
-//
-//    void push(String^ s)
-//	{
-//        if (top < 100)
-//		{
-//            st[top] = s;
-//            top++;
-//        }
-//        else
-//		{
-//            Console::WriteLine("Stack is full");
-//        }
-//    }
-//
-//    String^ pop()
-//	{
-//        if (top > 0)
-//		{
-//            top--;
-//            return st[top];
-//        }
-//        else 
-//		{
-//            Console::WriteLine("Stack is empty");
-//            return nullptr;
-//        }
-//    }
-//};
-//
-//int main(cli::array<System::String^>^ args)
-//{
-//    Stack^ stack = gcnew Stack();
-//    String^ input;
-//
-//    do {
-//        Console::WriteLine("What to do?");
-//        input = Console::ReadLine();
-//        if (input == "push")
-//		{
-//            Console::WriteLine("Enter a string to push:");
-//            String^ s = Console::ReadLine();
-//            stack->push(s);
-//        }
-//        else if (input == "pop") 
-//		{
-//            Console::WriteLine(stack->pop());
-//        }
-//    } while (input != "exit");
-//
-//    return 0;
-//}
